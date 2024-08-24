@@ -9,60 +9,58 @@ Estoy en duda con los cadetes, se me hace que los cadetes tambien es una relacio
 
 ## ¿Qué métodos considera que debería tener la clase Cadetería y la clase Cadete?
 ### Cadeteria:
-    -TomarPedido();
-    -PrepararPedido();
-    -ContratarCadete();
-    -DespedirCadete();
+- `TomarPedido()`;
+- PrepararPedido();
+- ContratarCadete();
+- DespedirCadete();
     
 ### Cadete: 
-    -EntregarPedido();
-    -CobrarPedido();
+- EntregarPedido();
+- CobrarPedido();
 
-## Teniendo en cuenta los principios de abstracción y ocultamiento, que atributos,
-propiedades y métodos deberían ser públicos y cuáles privados.
+## Teniendo en cuenta los principios de abstracción y ocultamiento, que atributos, propiedades y métodos deberían ser públicos y cuáles privados.
 
 **Clase Cliente**
-    Privados
-        -Nombre
-        -Direccion
-        -Telefono
-        -DatosReferenciaDireccion
+*Privados*
+- Nombre
+- Direccion
+- Telefono
+- DatosReferenciaDireccion
 **Clase Pedidos**
-    *Privados*
-        -Nro
-        -Obs
-        -Cliente
-        -Estado
-    *Publicos*
-        -VerDireccionCliente()
-        -VerDatosCliente()
+*Privados*
+- Nro
+- Obs
+- Cliente
+- Estado
+*Publicos*
+- VerDireccionCliente()
+- VerDatosCliente()
 
 **Clase Cadete**
-    *Privados*
-        -Id
-        -Nombre
-        -Direccion
-        -Telefono
-        -ListadoPedidos
-    *Publicos*
-        -JornalACobrar()
+*Privados*
+- Id
+- Nombre
+- Direccion
+- Telefono
+- ListadoPedidos
+*Publicos*
+- JornalACobrar()
 
 **Clase Cadeteria**
-    *Privados*
-        -Nombre
-        -Telefono
-        -ListadoCadetes
-    *Publicos*
+*Privados*
+- Nombre
+- Telefono
+- ListadoCadetes
+*Publicos*
 
 **Metodos agregados**
-
-    -TomarPedido();
-    -PrepararPedido();
-    -DespacharPedido();
-    -ContratarCadete();
+- TomarPedido();
+    - PrepararPedido();
+    - DespacharPedido();
+    - ContratarCadete();
      
-    -EntregarPedido();
-    -CobrarPedido();
+    - EntregarPedido();
+    - CobrarPedido();
 
 ## ¿Cómo diseñaría los constructores de cada una de las clases?
 
