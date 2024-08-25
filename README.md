@@ -21,12 +21,15 @@ Estoy en duda con los cadetes, se me hace que los cadetes tambien es una relacio
 ## Teniendo en cuenta los principios de abstracción y ocultamiento, que atributos, propiedades y métodos deberían ser públicos y cuáles privados.
 
 **Clase Cliente**
+
 *Privados*
 - Nombre
 - Direccion
 - Telefono
 - DatosReferenciaDireccion
+
 **Clase Pedidos**
+
 *Privados*
 - Nro
 - Obs
