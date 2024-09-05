@@ -9,13 +9,13 @@ Estoy en duda con los cadetes, se me hace que los cadetes tambien es una relacio
 ## ¿Qué métodos considera que debería tener la clase Cadetería y la clase Cadete?
 ### Cadeteria:
 - `TomarPedido();`
-- `PrepararPedido();`
-- `ContratarCadete();`
-- `DespedirCadete();`
+- `AsignarPedido();`
+- `ReasignarPedido();`
+
     
 ### Cadete: 
 - `EntregarPedido();`
-- `CobrarPedido();`
+- `CambiarEstadoPedido();`
 
 ## Teniendo en cuenta los principios de abstracción y ocultamiento, que atributos, propiedades y métodos deberían ser públicos y cuáles privados.
 

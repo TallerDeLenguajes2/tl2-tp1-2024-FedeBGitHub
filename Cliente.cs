@@ -16,7 +16,7 @@ public class Cliente
         }
 
         public string Direccion { get => direccion; }
-        public string DatosReferenciaDireccion { get => direccion; }
+        public string DatosReferenciaDireccion { get => datosReferenciaDireccion; }
         public string Nombre { get => nombre; }
         public string Telefono { get => telefono; }
 }
