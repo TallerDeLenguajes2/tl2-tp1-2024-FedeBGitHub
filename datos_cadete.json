@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 1,
+    "Nombre": "Juan Rodriguez",
+    "Direccion": "Pelegrini 1100",
+    "Telefono": "3814964154"
+  },
+  {
+    "Id": 2,
+    "Nombre": "Tomas Falco",
+    "Direccion": "Av Roca 1800",
+    "Telefono": "3816284274"
+  },
+  {
+    "Id": 3,
+    "Nombre": "Maria Perez",
+    "Direccion": "Lavalle 158",
+    "Telefono": "3816284274"
+  }
+]

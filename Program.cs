@@ -1,14 +1,41 @@
 ﻿using System.IO;
 using SistemaCadeteria;
-using LecturaCsv;
+using Datos;
 
-//------------------ Cargar datos ------------------------------------
-string direccionCadeteriaCSV = "../../../datos_cadeteria.csv";
-Cadeteria cadeteria = lecturaCSV.CargarCadeteriaDesdeCSV(direccionCadeteriaCSV);
 
+string dirCadeteriaSinExtension = "../../../datos_cadeteria";
+string dirCadetesSinExtension = "../../../datos_cadete";
+int opcion,opcionDatos;
+string extension = "";
+Cadeteria cadeteria;
+AccesoADatos accesoADatos = null;
+do
+{
+    Console.WriteLine("Seleccione con que desea trabajar:");
+    Console.WriteLine("1-CSV");
+    Console.WriteLine("2-JSON");
+    int.TryParse(Console.ReadLine(), out opcionDatos);
+    if (opcionDatos<1 || opcionDatos>2)
+    {
+        Console.WriteLine("Seleccione una opcion valida");
+    }
+} while (opcionDatos<1 || opcionDatos>2);
+
+switch (opcionDatos)
+{
+    case 1:
+        accesoADatos = new AccesoCSV();
+        extension = ".csv";
+    break;
+    case 2:
+        accesoADatos = new AccesoJSON();
+        extension = ".json";
+    break;
+}
+    
+    cadeteria = accesoADatos.CargarCadeteria(dirCadeteriaSinExtension + extension , dirCadetesSinExtension + extension);
+    
 //---------------------- Menu --------------------------------------
-int opcion;
-List<Pedido> listaPedidos = new List<Pedido>(); // Tiene todos los pedidos independientemente de cual sea el cadete al que sean asignados
 do
 {
     Console.WriteLine("------- Gestionar Pedidos -------");
@@ -17,7 +44,7 @@ do
     Console.WriteLine("3 - Cambiar estado del pedido");
     Console.WriteLine("4 - Reasignar pedido a otro cadete");
     Console.WriteLine("5 - Informe de pedidos");
-    Console.WriteLine("6 - Mostrar Todos los pedidos"); // Lo agregue yo
+    Console.WriteLine("6 - Mostrar Todos los pedidos");
     Console.WriteLine("7 - Salir");
 
     
@@ -30,64 +57,27 @@ do
     switch (opcion)
     {
         case 1:
-            cadeteria.TomarPedido(listaPedidos);
+            cadeteria.TomarPedido();
         break;
         case 2:
-            cadeteria.AsignarPedido(listaPedidos);
+            int nroPedido = cadeteria.ElegirPedido();
+            int idCadete = cadeteria.ElegirCadete();
+            cadeteria.AsignarPedido(idCadete,nroPedido);
         break;
         case 3:
-            cadeteria.CambiarEstadoPedido(listaPedidos);
+            cadeteria.CambiarEstadoPedido();
         break;
         case 4:
-            cadeteria.ReasignarPedido(listaPedidos);
+            cadeteria.ReasignarPedido();
         break;
         case 5:
-            cadeteria.Informe(listaPedidos);
+            cadeteria.Informe();
         break;
         case 6:
             Console.WriteLine("\n---------- Mostrar Pedidos ----------");
-            foreach (Pedido item in listaPedidos)
-            {   
-                item.VerPedido();
-            }
-            Console.WriteLine(" ");
+            cadeteria.MostrarTodosLosPedidos();
         break;
     }
 } while (opcion!=7);
 
 
-/*
-//---------------------- Escribir Archivo CSV ----------------------------------
-string path2 = "../../../prueba.csv";
-        using (var writer = new StreamWriter(path2))
-        {
-            // Escribir la cabecera
-            writer.WriteLine("Nombre,Edad,Pais");
-
-            // Escribir datos
-            writer.WriteLine("Juan,30,España");
-            writer.WriteLine("Ana,25,México");
-            writer.WriteLine("Pedro,28,Argentina");
-        }
-
-*/
-
-/*----------------- Leer CSV usando Stream -----------------------------------
-int cont = 0;
-List<Cadete> listadoCadetes = new List<Cadete>();
-        using (var reader = new StreamReader(path))
-        {
-            while (!reader.EndOfStream)
-            {
-                var linea = reader.ReadLine();
-                string [] values = linea.Split(',');
-            
-            if (cont>0)
-            {
-                    Cadete C = new Cadete(int.Parse(values[0]),values[1],values[2],values[3]);
-                    listadoCadetes.Add(C);
-            }
-            cont++;
-            }
-        }
-*/
