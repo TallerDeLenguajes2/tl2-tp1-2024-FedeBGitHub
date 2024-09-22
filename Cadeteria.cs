@@ -19,162 +19,83 @@ public class Cadeteria
             listaPedidos = new List<Pedido>();
         }
         public List<Cadete> ListaCadetes { get => listaCadetes; }
-//---------------------------------------------------------------------------------
-        public void TomarPedido()
-        {   
-            //----Datos del pedido
-            Console.WriteLine("\n----------- Tomar Pedido -----------");
-            int nroPedido = listaPedidos.Count + 1;
-            Console.WriteLine("Nro Pedido: " + nroPedido);
-            Console.Write("Ingrese la observacion: ");
-            string obs = Console.ReadLine();
-            string estado = "sin asignar";
-            //----Datos del cliente
-            Console.WriteLine("Datos del cliente");
-            Console.Write("Ingrese el nombre: ");
-            string nombre = Console.ReadLine();
-            Console.Write("Ingrese el direccion: ");
-            string direccion = Console.ReadLine();
-            Console.Write("Ingrese el telefono: ");
-            string telefono = Console.ReadLine();
-            Console.Write("Ingrese datos de referencia de la direccion: ");
-            string datosReferencia = Console.ReadLine();
-            Console.WriteLine(" ");
-            //----Creo un pedido con esos datos
-            Pedido pedido = new Pedido(nroPedido,obs,estado,nombre,direccion,telefono,datosReferencia);
-            //----Agrego esos pedidos a la lista de pedidos
-            listaPedidos.Add(pedido);
-        }
-//-------------------------------------------------------------------------------
-        public void AsignarPedido(int idCadete, int idPedido)
-        {
-            foreach (Pedido pedido in listaPedidos)
-            {
-                if (pedido.Nro == idPedido)
-                {
-                    if (pedido.Estado == "asignado")
-                    {
-                        Console.WriteLine("El pedido ya está asignado a un cadete");
-                        return;
-                    }
-                    if (pedido.Estado == "entregado")
-                    {
-                        Console.WriteLine("El pedido ya fue entregado, por lo tanto no se puede asignar de nuevo");
-                        return;
-                    }
-                    pedido.Estado = "asignado";
-                    pedido.IdCadeteAsignado = idCadete;
-                }
-            }
-        }
-//--------------------------------------------------------------------------------
-        public void CambiarEstadoPedido()
-        {
-            int nroPedido;
-            Console.WriteLine("\n--- Cambiar Estado a entregado ---");
-            if (listaPedidos.Count == 0)
-            {
-                Console.WriteLine("No hay pedidos disponibles");
-                return;
-            }
-            //---Elegir pedido
-                nroPedido = ElegirPedido();
-            
-            //--Cambiar estado
-            foreach (Pedido pedido in listaPedidos)
-            {   
-                if (pedido.Nro == nroPedido)
-                {
-                    if (pedido.Estado =="sin asignar")
-                    {
-                        Console.WriteLine("El pedido debe estar asignado a un cadete para cambiar su estado a entregado ");
-                        return;
-                    }else{
-                        pedido.Estado="entregado";
-                    }
-                    
-                }
-            }
-        }
-//--------------------------------------------------------------------------------
-        public void ReasignarPedido()
-        {
-            int nroPedido;
-            int idCadete;
-            Console.WriteLine("\n----- Reasignar Pedido -----");
-            nroPedido = ElegirPedido();
-            //Mostrar Cadetes disponibles para elegir a cual asignarle el pedido
-            idCadete = ElegirCadete();
+        public List<Pedido> ListaPedidos { get => listaPedidos; }
 
-            // cambio el id del cadete asociado
-            AsignarPedido(idCadete,nroPedido);
-        }
-//--------------------------------------------------------------------------------
-        public float JornalACobrar(int idCadete)
+        public bool GuardarPedido(Pedido pedido)
         {
-            float jornal = 0;
-            foreach (Pedido pedido in listaPedidos)
+            try
             {
-                if (pedido.IdCadeteAsignado == idCadete && pedido.Estado =="entregado")
-                {
-                    jornal += 500;
-                }
+                listaPedidos.Add(pedido);
+                return true;
             }
-            return jornal;
-        }
-//--------------------------------------------------------------------------------
-        public void Informe()
-        {
-            Console.WriteLine("----- Informe -----");
-            if (listaPedidos.Count > 0)
+            catch
             {
-                Console.WriteLine("Total de pedidos: " + listaPedidos.Count);
-                foreach (Cadete cadete in listaCadetes)
-                {
-                    Console.WriteLine("\n --- Id Cadete {0} ---",cadete.Id);
-                    Console.WriteLine("Nombre: " + cadete.Nombre);
-                    float jornal = JornalACobrar(cadete.Id);
-                    int cantEnviosCadete = listaPedidos.Count(p => p.IdCadeteAsignado == cadete.Id);
-                    Console.WriteLine("Cantidad Envios: " + cantEnviosCadete);
-                    Console.WriteLine("Monto ganado: " + jornal);
-                    float promedioEnvios =  (cantEnviosCadete * 100) / listaPedidos.Count;
-                    Console.WriteLine("Promedio de envios: {0} %",promedioEnvios);
-                }
+                return false;
+            }
+        }
+
+
+    public bool AsignarPedido(int idCadete, int idPedido)
+        {
+            bool asignado = false;
+            Pedido pedidoElegido = listaPedidos.Find(p => p.Nro == idPedido);
+            if (pedidoElegido == null || pedidoElegido.IdCadeteAsignado != -999)
+            {
+                return asignado;
             }else{
-                Console.WriteLine("Todavia no se hicieron pedidos por lo tanto no se puede realizar el informe");
+                if(pedidoElegido.IdCadeteAsignado == -999)
+                {
+                    pedidoElegido.Estado = "asignado";
+                    pedidoElegido.IdCadeteAsignado = idCadete;
+                    asignado = true;
+                }
             }
-        }
-//--------------------------------------------------------------------------------
-        public void MostrarTodosLosPedidos()
-        {
-            foreach (Pedido item in listaPedidos)
-            {   
-                item.VerPedido();
-            }
-        }
-//--------------------------------------------------------------------------------
-        public int ElegirPedido()
-        {
-            int nroPedido;
-            Console.WriteLine("\n----- Elegir Pedido -----");
-            MostrarTodosLosPedidos();
-            Console.Write("\nSeleccione el pedido (Nro de Pedido): ");
-            int.TryParse(Console.ReadLine(), out nroPedido);
-            return nroPedido;
+            return asignado;
+            
         }
 
-        public int ElegirCadete()
+
+        public bool CambiarEstadoPedido(int nroElegido)
         {
-            int idCadete;
-            Console.WriteLine("\n----- Cadetes Disponibles -----");
-            foreach (var cadete in ListaCadetes)
+            bool asignado = false;
+            Pedido pedidoElegido = listaPedidos.Find(p => p.Nro == nroElegido);
+            if (pedidoElegido != null)
             {
-                cadete.datosCadete();
+                if (pedidoElegido.Estado == "asignado" || pedidoElegido.Estado == "entregado" ) // un pedido debe estar asignado a un cadete para cambiar su estado a entregado
+                {
+                    pedidoElegido.Estado = "entregado";
+                    asignado = true;
+                }
+                
             }
-            Console.Write("Seleccione el id del cadete: ");
-            int.TryParse(Console.ReadLine(), out idCadete);
-            return idCadete;
+            return asignado;
         }
+
+        public bool ReasignarPedido(int nroElegido,int idCadete)
+        {
+            bool asignado = false;
+            Pedido pedidoElegido = listaPedidos.Find(p => p.Nro == nroElegido);
+            if (pedidoElegido != null)
+            {
+                pedidoElegido.IdCadeteAsignado = idCadete;
+                asignado = true;
+            }
+            return asignado;
+        }
+
+
+        public int CalculoPedidosCompletados(int idCadete)
+        {
+            List<Pedido> pedidosEntregados = listaPedidos.Where(p => p.Estado == "entregado").ToList();
+            int numPedidosCompletados = pedidosEntregados.Count(p => p.IdCadeteAsignado == idCadete);
+            return numPedidosCompletados;
+        }
+
+        public float JornalACobrar(int pedidosCompletados)
+        {
+            return 500*pedidosCompletados;
+        }
+
 }
 
 

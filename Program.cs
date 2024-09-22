@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using SistemaCadeteria;
 using Datos;
+using UInterfaz;
+using System.Drawing;
 
 
 string dirCadeteriaSinExtension = "../../../datos_cadeteria";
@@ -9,6 +11,8 @@ int opcion,opcionDatos;
 string extension = "";
 Cadeteria cadeteria;
 AccesoADatos accesoADatos = null;
+
+
 do
 {
     Console.WriteLine("Seleccione con que desea trabajar:");
@@ -36,6 +40,13 @@ switch (opcionDatos)
     cadeteria = accesoADatos.CargarCadeteria(dirCadeteriaSinExtension + extension , dirCadetesSinExtension + extension);
     
 //---------------------- Menu --------------------------------------
+
+
+int nroPedido = 0;
+int eleccionPedido;
+int idCadete;
+bool respuesta;
+List<Pedido> pedidosSinEntregar = null;
 do
 {
     Console.WriteLine("------- Gestionar Pedidos -------");
@@ -57,25 +68,84 @@ do
     switch (opcion)
     {
         case 1:
-            cadeteria.TomarPedido();
+            nroPedido++;
+            Pedido nuevoPedido = Interfaz.TomarPedido(nroPedido);
+            cadeteria.GuardarPedido(nuevoPedido);
         break;
         case 2:
-            int nroPedido = cadeteria.ElegirPedido();
-            int idCadete = cadeteria.ElegirCadete();
-            cadeteria.AsignarPedido(idCadete,nroPedido);
+            
+            eleccionPedido = Interfaz.ElegirPedido(cadeteria);
+            idCadete = Interfaz.ElegirCadete(cadeteria);
+            respuesta = cadeteria.AsignarPedido(idCadete,eleccionPedido);
+
+            if (respuesta == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Pedido asignado con exito");
+                Console.ResetColor();
+            }else{
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error al asignar el pedido");
+                Console.ResetColor();
+            }
         break;
         case 3:
-            cadeteria.CambiarEstadoPedido();
+            eleccionPedido = Interfaz.ElegirPedido(cadeteria);
+            respuesta = cadeteria.CambiarEstadoPedido(eleccionPedido);
+            if (respuesta == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Cambio de estado exitoso");
+                Console.ResetColor();
+            }else{
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Error al cambiar estado");
+                Console.ResetColor();
+            }
         break;
         case 4:
-            cadeteria.ReasignarPedido();
+            bool hayPedidos = false;
+            do
+            {
+                pedidosSinEntregar = cadeteria.ListaPedidos.Where(p => p.Estado == "asignado").ToList();
+                Console.WriteLine("\n----- Elegir Pedido -----");
+                hayPedidos = Interfaz.pedidosAsignadosSinEntregar(cadeteria.ListaPedidos);
+                if (hayPedidos == true)
+                {
+                    do
+                    {
+                        Console.Write("\nSeleccione el pedido (Nro de Pedido): ");
+                    } while (!int.TryParse(Console.ReadLine(), out nroPedido));
+                } 
+            } while (!pedidosSinEntregar.Any(p => p.Nro == nroPedido) && pedidosSinEntregar.Count>0);
+
+            if (pedidosSinEntregar.Count > 0)
+            {
+                idCadete = Interfaz.ElegirCadete(cadeteria);
+                respuesta = cadeteria.ReasignarPedido(nroPedido,idCadete);
+                if (respuesta == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Reasignacion exitosa");
+                    Console.ResetColor();
+                }else{
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Error al reasignar pedido");
+                    Console.ResetColor();
+                }
+            }else{
+                Console.WriteLine("No hay pedidos para reasignar");
+            }
+
+            
+            
         break;
         case 5:
-            cadeteria.Informe();
+            Interfaz.Informe(cadeteria);
         break;
         case 6:
             Console.WriteLine("\n---------- Mostrar Pedidos ----------");
-            cadeteria.MostrarTodosLosPedidos();
+            Interfaz.MostrarTodosLosPedidos(cadeteria);
         break;
     }
 } while (opcion!=7);

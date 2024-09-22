@@ -47,6 +47,19 @@ namespace Datos
 
     public class AccesoJSON : AccesoADatos
     {
+        /*
+        public static void guardarJson(List<Cadete> listaCadetes, string archivoCadetes)
+        {
+            string cadeteJson =  JsonSerializer.Serialize(listaCadetes);
+            File.WriteAllText(archivoCadetes,cadeteJson);
+            
+        }
+        public static void guardarCadeteria(Cadeteria cadeteria, string archivoCaderia)
+        {
+            string cadeteriaJson =  JsonSerializer.Serialize(cadeteria);
+            File.WriteAllText(archivoCaderia,cadeteriaJson);
+            
+        }*/
         public override List<Cadete> CargarCadetes(string archivoCadetes)
         {
             List<Cadete> listaCadetes = new List<Cadete>();
